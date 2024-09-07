@@ -5,7 +5,7 @@ import kaggle
 kaggle.api.authenticate()
 
 # Dataset spec
-dataset_name = 'quora/question-pairs-dataset' 
+dataset_name = 'kanishk307/6000-indian-food-recipes-dataset' 
 dataset_version = 'latest'  # 'latest' to get the most recent version
 download_path = './datasets'
 
