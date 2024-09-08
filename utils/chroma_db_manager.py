@@ -31,12 +31,30 @@ class ChromaDBManager:
             metadatas=metadatas
         )
 
-    def query_embeddings(self, query_embedding, n_results=5):
+    def query_embeddings(self, query_embedding, n_results=1):
         # Retrieve the most relevant documents based on the query_embedding
         results = self.collection.query(query_embeddings=query_embedding.tolist(), n_results=n_results)
-        # Extract the combined text from the matched results
-        matched_texts = [
-            f"{result['TranslatedRecipeName']} - {result['Course']}.\nTranslatedIngredients: {result['TranslatedIngredients']}\nTranslatedInstructions: {result['TranslatedInstructions']}\nURL: {result['URL']}"
-            for result in results['documents']
-        ]
-        return matched_texts  # Return the matched texts for generation
+
+        metadatas = results.get('metadatas', [[]])[0]
+        if not metadatas:
+            return "No relevant recipes found."
+       
+        # Prepare text from retrieved metadata
+        context_parts = []
+        for metadata in metadatas:
+            recipe_name = metadata.get('TranslatedRecipeName', 'Unknown Recipe')
+            course = metadata.get('Course', 'Unknown Course')
+            ingredients = metadata.get('TranslatedIngredients', 'No Ingredients')
+            instructions = metadata.get('TranslatedInstructions', 'No Instructions')
+            url = metadata.get('URL', 'No URL')
+
+            context_part = (f"Recipe: {recipe_name}\n"
+                            f"Course: {course}\n"
+                            f"Ingredients: {ingredients}\n"
+                            f"Instructions: {instructions}\n"
+                            f"URL: {url}\n")
+            
+            context_parts.append(context_part)
+
+        # Combine all context parts into one string
+        return " ".join(context_parts)  # Join parts with a space or other delimiter as needed
