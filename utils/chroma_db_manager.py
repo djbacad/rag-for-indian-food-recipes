@@ -11,9 +11,19 @@ class ChromaDBManager:
         # We use get_or_create so we can access the chromadb object after persistence
         self.collection = self.client.get_or_create_collection(name=collection_name)
 
-    def add_embeddings(self, embeddings, texts):
-        ids = [str(uuid.uuid4()) for _ in range(len(texts))]  # Generate unique IDs for each text
-        metadatas = [{"question": text} for text in texts]
+    def add_embeddings(self, embeddings, recipes):
+        ids = [str(uuid.uuid4()) for _ in range(len(recipes))]  # Generate unique IDs for each text
+        metadatas = [
+            {
+                "TranslatedRecipeName": recipe['TranslatedRecipeName'],
+                "TranslatedIngredients": recipe['TranslatedIngredients'],
+                "TranslatedInstructions": recipe['TranslatedInstructions'],
+                "Course": recipe['Course'],
+                "TotalTimeInMins": recipe['TotalTimeInMins'],
+                "URL": recipe['URL']
+            }
+            for recipe in recipes
+        ]
         # Adding documents and IDs to the collection
         self.collection.add(
             ids=ids,
@@ -22,5 +32,11 @@ class ChromaDBManager:
         )
 
     def query_embeddings(self, query_embedding, n_results=5):
+        # Retrieve the most relevant documents based on the query_embedding
         results = self.collection.query(query_embeddings=query_embedding.tolist(), n_results=n_results)
-        return [result['question'] for result in results['metadatas'][0]]
+        # Extract the combined text from the matched results
+        matched_texts = [
+            f"{result['TranslatedRecipeName']} - {result['Course']}.\nTranslatedIngredients: {result['TranslatedIngredients']}\nTranslatedInstructions: {result['TranslatedInstructions']}\nURL: {result['URL']}"
+            for result in results['documents']
+        ]
+        return matched_texts  # Return the matched texts for generation
