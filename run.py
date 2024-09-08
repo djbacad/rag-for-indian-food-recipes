@@ -29,7 +29,7 @@ def main(question):
 
    # Generate a response
     print("Generating Response...⌛")
-    outputs = model.generate(input_ids, max_new_tokens=1000, min_new_tokens=500)
+    outputs = model.generate(input_ids, max_new_tokens=2000, min_new_tokens=1000)
     generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
     print(generated_text)

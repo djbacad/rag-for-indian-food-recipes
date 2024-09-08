@@ -18,7 +18,6 @@ class ChromaDBManager:
                 "TranslatedRecipeName": recipe['TranslatedRecipeName'],
                 "TranslatedIngredients": recipe['TranslatedIngredients'],
                 "TranslatedInstructions": recipe['TranslatedInstructions'],
-                "Course": recipe['Course'],
                 "TotalTimeInMins": recipe['TotalTimeInMins'],
                 "URL": recipe['URL']
             }
