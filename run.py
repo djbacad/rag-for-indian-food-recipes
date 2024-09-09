@@ -1,12 +1,15 @@
 import argparse
+import transformers
 from utils.embedder import Embedder
 from utils.chroma_db_manager import ChromaDBManager
-from transformers import AutoTokenizer, AutoModelForCausalLM
+from transformers import T5Tokenizer, T5ForConditionalGeneration
 import warnings
+
 # Suppress all warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
+transformers.logging.set_verbosity_error()
 
-print("Querying and Generating...⌛")
+print("Retrieving Relevant Information...⌛")
 
 def main(question):
     # Initialize the embedder and ChromaDB manager
@@ -20,8 +23,8 @@ def main(question):
     context = chroma_db_manager.query_embeddings(query_embedding)
 
     # Initialize the tokenizer and model
-    tokenizer = AutoTokenizer.from_pretrained("mistralai/Mixtral-8x7B-Instruct-v0.1")
-    model = AutoModelForCausalLM.from_pretrained("mistralai/Mixtral-8x7B-Instruct-v0.1")
+    tokenizer = T5Tokenizer.from_pretrained("google/flan-t5-small", legacy=False)
+    model = T5ForConditionalGeneration.from_pretrained("google/flan-t5-small", device_map="auto")
 
     # Prepare input text for the model
     input_text = f"Question: {question}. Context: {context}"
@@ -29,13 +32,12 @@ def main(question):
 
    # Generate a response
     print("Generating Response...⌛")
-    outputs = model.generate(input_ids, max_new_tokens=2000, min_new_tokens=100)
+    outputs = model.generate(input_ids, max_new_tokens=2000, min_new_tokens=10)
     generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-    print(generated_text)
     # Display the generated response
     print("Generated Answer:")
-    print(generated_response[0]['generated_text'])
+    print(generated_text)
     print("Done ✅")
 
 if __name__ == "__main__":
