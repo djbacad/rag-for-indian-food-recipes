@@ -4,7 +4,7 @@ Retrieval-Augmented Generation (RAG) for Indian Food Recipes
 ### Sample Query:
 ![image](https://github.com/user-attachments/assets/5e52b930-d8f5-4ee8-8c95-bf3e78116fce)
 
-This project demonstrates a Retrieval-Augmented Generation (RAG) system designed to provide detailed responses about Indian food recipes. It combines a retrieval mechanism with a generative model to offer rich, contextually accurate answers based on user queries. Notably, this implementation achieves RAG functionality without using LangChain, focusing on direct integration with ChromaDB and the google/flan-t5-small model for a streamlined solution.
+This project demonstrates a Retrieval-Augmented Generation (RAG) system designed to provide detailed responses about Indian food recipes. This implementation achieves RAG functionality without using LangChain, focusing on direct integration with ChromaDB and the google/flan-t5-small model for a streamlined solution.
 
 ### Project Highlights:
 - Retrieval Mechanism: Uses ChromaDB to store and retrieve recipe information. Recipes are embedded and queried based on user input to find the most relevant data.
