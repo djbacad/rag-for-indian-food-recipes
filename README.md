@@ -8,7 +8,7 @@ This project demonstrates a Retrieval-Augmented Generation (RAG) system designed
 
 ### Project Highlights:
 - Retrieval Mechanism: Uses ChromaDB to store and retrieve recipe information. Recipes are embedded and queried based on user input to find the most relevant data.
-- Generative Model: Employs the google/flan-t5-small model from Hugging Face's Transformers library to generate detailed responses. This model processes the retrieved recipe data to create contextually rich answers.
+- Generative Model: Employs the google/flan-t5-small model from hf's transformers to generate detailed responses. This model processes the retrieved recipe data to create contextually rich answers.
 - No LangChain: Implements RAG without LangChain, relying instead on a direct approach with ChromaDB and the selected generative model to achieve its functionality.
 
 ### Files Overview:
